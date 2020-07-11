@@ -22,11 +22,11 @@
     "electron-store": "^5.1.0",
     "frappe-charts": "^1.3.0",
     "frappejs": "https://github.com/frappe/frappejs",
-    "knex": "^0.20.4",
+    "knex": "https://github.com/harish2704/knex#fix-escape-single-quotes-in-defalutto",
     "lodash": "^4.17.15",
     "luxon": "^1.21.3",
     "portal-vue": "^2.1.6",
-    "sqlite3": "^4.1.1",
+    "sqlite3": "^4.2.0",
     "tailwindcss": "^1.2.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3"
@@ -38,7 +38,7 @@
     "@vue/cli-service": "^4.1.0",
     "@vue/eslint-config-prettier": "^5.0.0",
     "babel-eslint": "^10.0.3",
-    "electron": "^6.0.0",
+    "electron": "8.2.0",
     "electron-notarize": "^0.2.1",
     "electron-updater": "^4.2.0",
     "eslint": "^5.16.0",
@@ -49,6 +49,10 @@
     "raw-loader": "^4.0.0",
     "vue-cli-plugin-electron-builder": "https://github.com/netchampfaris/vue-cli-plugin-electron-builder",
     "vue-template-compiler": "^2.6.10"
+  },
+  "resolutions": {
+    "frappejs/knex": "https://github.com/harish2704/knex#fix-escape-single-quotes-in-defalutto",
+    "frappejs/sqlite3": "^4.2.0"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

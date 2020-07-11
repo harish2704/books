@@ -1,7 +1,9 @@
 const frappe = require('frappejs');
 const utils = require('../../../accounting/utils');
-const { openQuickEdit } = require('@/utils');
-const Badge = require('@/components/Badge').default;
+if (process.env.IS_ELECTRON === 'true') {
+  const { openQuickEdit } = require('@/utils');
+  const Badge = require('@/components/Badge').default;
+}
 
 module.exports = {
   getStatusColumn() {

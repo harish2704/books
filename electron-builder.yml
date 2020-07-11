@@ -1,11 +1,8 @@
 productName: Frappe Books
 appId: io.frappe.books
 afterSign: build/notarize.js
-snap:
-  publish:
-    - github
-mac:
-  hardenedRuntime: true
-  gatekeeperAssess: false
-  entitlements: build/entitlements.mac.plist
-  entitlementsInherit: build/entitlements.mac.plist
+linux:
+   target:
+     - target: dir
+       arch:
+         - x64

@@ -1,14 +1,15 @@
 import frappe from 'frappejs';
 import fs from 'fs';
 import { _ } from 'frappejs/utils';
-import migrate from './migrate';
+// import migrate from './migrate';
 import { remote, shell, ipcRenderer } from 'electron';
-import SQLite from 'frappejs/backends/sqlite';
+import HTTPClient from 'frappejs/backends/http';
 import postStart from '../server/postStart';
 import router from '@/router';
 import Avatar from '@/components/Avatar';
 import config from '@/config';
 
+frappe.fetch = window.fetch.bind();
 export function createNewDatabase() {
   return new Promise(resolve => {
     remote.dialog.showSaveDialog(
@@ -47,30 +48,16 @@ export function createNewDatabase() {
 }
 
 export function loadExistingDatabase() {
-  return new Promise(resolve => {
-    remote.dialog.showOpenDialog(
-      remote.getCurrentWindow(),
-      {
-        title: _('Select file'),
-        properties: ['openFile'],
-        filters: [{ name: 'SQLite DB File', extensions: ['db'] }]
-      },
-      files => {
-        if (files && files[0]) {
-          resolve(files[0]);
-        }
-      }
-    );
-  });
+  return new Promise.resolve();
 }
 
 export async function connectToLocalDatabase(filepath) {
   frappe.login('Administrator');
-  frappe.db = new SQLite({
-    dbPath: filepath
+  frappe.db = new HTTPClient({
+    server: 'localhost:8000'
   });
   await frappe.db.connect();
-  await migrate();
+  // await migrate();
   await postStart();
 
   // set file info in config
