@@ -123,13 +123,19 @@ export default {
           this.$data[d.periodKey]
         );
 
-        let result = await frappe.db
-          .knex(d.doctype)
-          .sum({ total: 'baseGrandTotal' })
-          .sum({ outstanding: 'outstandingAmount' })
-          .where('submitted', 1)
-          .whereBetween('date', [fromDate, toDate])
-          .first();
+        let result = await frappe.db.getAll({
+          doctype: d.doctype,
+          fields: [
+            { $sum: { total: 'baseGrandTotal' } },
+            { $sum: { outstanding: 'outstandingAmount' } }
+          ],
+          filters: {
+            submitted: 1,
+            date: ['>=', fromDate, '<=', toDate]
+          },
+          limit: 1
+        });
+        result = result[0];
 
         let { total, outstanding } = result;
         d.total = total;

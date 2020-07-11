@@ -23,12 +23,15 @@ module.exports = class PartyServer extends BaseDocument {
     let isCustomer = this.customer;
     let doctype = isCustomer ? 'SalesInvoice' : 'PurchaseInvoice';
     let partyField = isCustomer ? 'customer' : 'supplier';
-    let { totalOutstanding } = await frappe.db.knex
-      .sum({ totalOutstanding: 'outstandingAmount' })
-      .from(doctype)
-      .where('submitted', 1)
-      .andWhere(partyField, this.name)
-      .first();
+    let { totalOutstanding } = (
+      await frappe.getAll({
+        doctype: `View${doctype}Outstanding`,
+        filters: {
+          [partyField]: this.name
+        },
+        limit: 1
+      })
+    )[0];
 
     await this.set('outstandingAmount', this.round(totalOutstanding));
     await this.update();

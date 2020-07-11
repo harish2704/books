@@ -84,22 +84,14 @@ export default {
   methods: {
     async render() {
       let { fromDate, toDate } = await getDatesAndPeriodicity(this.period);
-      let expenseAccounts = frappe.db.knex
-        .select('name')
-        .from('Account')
-        .where('rootType', 'Expense');
-      let topExpenses = await frappe.db.knex
-        .select({
-          total: frappe.db.knex.raw('sum(??) - sum(??)', ['debit', 'credit'])
-        })
-        .select('account')
-        .from('AccountingLedgerEntry')
-        .where('account', 'in', expenseAccounts)
-        .whereBetween('date', [fromDate, toDate])
-        .groupBy('account')
-        .orderBy('total', 'desc')
-        .limit(5);
-
+      let topExpenses = await frappe.db.getAll({
+        doctype: 'AccountingLedgerEntry',
+        filters: {
+          $scope: 'topExpenses',
+          fromDate,
+          toDate
+        }
+      });
       let shades = [
         { class: 'bg-gray-800', hex: theme.backgroundColor.gray['800'] },
         { class: 'bg-gray-600', hex: theme.backgroundColor.gray['600'] },

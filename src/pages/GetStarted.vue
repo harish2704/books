@@ -271,7 +271,10 @@ export default {
 
       if (!frappe.GetStarted.itemCreated) {
         let { count } = (
-          await frappe.db.knex('Item').count('name as count')
+          await frappe.db.getAll({
+            doctype: 'Item',
+            fields: [{ $count: 'name as count' }]
+          })
         )[0];
         if (count > 0) {
           toUpdate.itemCreated = 1;
@@ -280,7 +283,10 @@ export default {
 
       if (!frappe.GetStarted.invoiceCreated) {
         let { count } = (
-          await frappe.db.knex('SalesInvoice').count('name as count')
+          await frappe.db.getAll({
+            doctype: 'SalesInvoice',
+            fields: [{ $count: 'name as count' }]
+          })
         )[0];
         if (count > 0) {
           toUpdate.invoiceCreated = 1;
@@ -289,10 +295,13 @@ export default {
 
       if (!frappe.GetStarted.customerCreated) {
         let { count } = (
-          await frappe.db
-            .knex('Party')
-            .where('customer', 1)
-            .count('name as count')
+          await frappe.db.getAll({
+            doctype: 'Party',
+            filters: {
+              customer: 1
+            },
+            fields: [{ $count: 'name as count' }]
+          })
         )[0];
         if (count > 0) {
           toUpdate.customerCreated = 1;
@@ -301,7 +310,14 @@ export default {
 
       if (!frappe.GetStarted.billCreated) {
         let { count } = (
-          await frappe.db.knex('PurchaseInvoice').count('name as count')
+          await frappe.db.getAll({
+            doctype: 'PurchaseInvoice',
+            fields: [
+              {
+                $count: 'name as count'
+              }
+            ]
+          })
         )[0];
         if (count > 0) {
           toUpdate.billCreated = 1;
@@ -310,10 +326,17 @@ export default {
 
       if (!frappe.GetStarted.supplierCreated) {
         let { count } = (
-          await frappe.db
-            .knex('Party')
-            .where('supplier', 1)
-            .count('name as count')
+          await frappe.db.getAll({
+            doctype: 'Party',
+            fields: [
+              {
+                $count: 'name as count'
+              }
+            ],
+            filters: {
+              supplier: 1
+            }
+          })
         )[0];
         if (count > 0) {
           toUpdate.supplierCreated = 1;
