@@ -1,6 +1,6 @@
 let { DateTime } = require('luxon');
 
-export async function getExchangeRate({ fromCurrency, toCurrency, date }) {
+exports.getExchangeRate = async function getExchangeRate({ fromCurrency, toCurrency, date }) {
   if (!date) {
     date = DateTime.local().toISODate();
   }
